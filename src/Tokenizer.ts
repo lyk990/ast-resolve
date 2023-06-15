@@ -41,7 +41,6 @@ export type Token = {
   raw?: string;
 };
 
-// 策略模式
 const TOKENS_GENERATOR: Record<string, (...args: any[]) => Token> = {
   let(start: number) {
     return { type: TokenType.Let, value: "let", start, end: start + 3 };
@@ -185,7 +184,7 @@ type SingleCharTokens = "(" | ")" | "{" | "}" | "." | ";" | "," | "*" | "=";
 
 const KNOWN_SINGLE_CHAR_TOKENS = new Map<
   SingleCharTokens,
-  typeof TOKENS_GENERATOR[keyof typeof TOKENS_GENERATOR]
+  (typeof TOKENS_GENERATOR)[keyof typeof TOKENS_GENERATOR]
 >([
   ["(", TOKENS_GENERATOR.leftParen],
   [")", TOKENS_GENERATOR.rightParen],
@@ -222,7 +221,7 @@ export class Tokenizer {
   constructor(input: string) {
     this._source = input;
   }
-
+  // 扫描
   scanIndentifier(): void {
     this._setScanMode(ScanMode.Identifier);
     // 继续扫描，直到收集完整的单词
@@ -239,14 +238,14 @@ export class Tokenizer {
       currentChar = this._getCurrentChar();
     }
     let token;
-    // 1. 结果为关键字
+    // 结果为关键字时
     if (identifier in TOKENS_GENERATOR) {
       token =
         TOKENS_GENERATOR[identifier as keyof typeof TOKENS_GENERATOR](
           startIndex
         );
     }
-    // 2. 结果为标识符
+    // 结果为标识符
     else {
       token = TOKENS_GENERATOR["identifier"](startIndex, identifier);
     }

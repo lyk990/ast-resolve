@@ -35,7 +35,7 @@ export class Parser {
     const program = this._parseProgram();
     return program;
   }
-
+  // 核心解析方法
   private _parseProgram(): Program {
     const program: Program = {
       type: NodeType.Program,

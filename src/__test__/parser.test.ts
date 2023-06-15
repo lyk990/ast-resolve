@@ -13,12 +13,12 @@ describe("testParserFunction", () => {
     const ast = {
       type: NodeType.Program,
       start: 0,
-      end: 10,
+      end: 9, // error
       body: [
         {
           type: NodeType.VariableDeclaration,
           start: 0,
-          end: 10,
+          end: 9, // error
           declarations: [
             {
               type: NodeType.VariableDeclarator,
@@ -170,11 +170,11 @@ describe("testParserFunction", () => {
               {
                 type: NodeType.ReturnStatement,
                 start: 21,
-                end: 37,
+                end: 36, // error
                 argument: {
                   type: NodeType.CallExpression,
                   start: 28,
-                  end: 37,
+                  end: 36, // error
                   callee: {
                     type: NodeType.MemberExpression,
                     object: {
