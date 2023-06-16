@@ -75,7 +75,6 @@ export class Parser {
     ) {
       return this._parseVariableDeclaration();
     }
-    console.log(this._getCurrentToken());
     throw new Error("Unexpected token");
   }
 
@@ -83,7 +82,6 @@ export class Parser {
     const { start } = this._getCurrentToken();
     const specifiers = [];
     this._goNext(TokenType.Import);
-    // import a
     if (this._checkCurrentTokenType(TokenType.Identifier)) {
       const local = this._parseIdentifier();
       const defaultSpecifier = {
@@ -97,7 +95,7 @@ export class Parser {
         this._goNext(TokenType.Comma);
       }
     }
-    // import { name1 }
+
     if (this._checkCurrentTokenType(TokenType.LeftCurly)) {
       this._goNext(TokenType.LeftCurly);
       while (!this._checkCurrentTokenType(TokenType.RightCurly)) {
@@ -278,8 +276,12 @@ export class Parser {
   }
 
   private _parseVariableDeclaration(): VariableDeclaration {
+    // 语句起始位置
     const { start } = this._getCurrentToken();
+    // 获取当前Declaration类型
     const kind = this._getCurrentToken().value;
+    // 判断当前tokne1是否属于这几个类型，
+    // 是的话往下继续扫描,否则报错
     this._goNext([TokenType.Let, TokenType.Var, TokenType.Const]);
     const declarations = [];
     const isVariableDeclarationEnded = (): boolean => {
@@ -454,7 +456,7 @@ export class Parser {
     };
     return node;
   }
-
+  // 解析函数表达式
   private _parseFunctionExpression(): FunctionExpression {
     const { start } = this._getCurrentToken();
     this._goNext(TokenType.Function);
@@ -512,7 +514,7 @@ export class Parser {
     this._goNext(token.type);
     return literal;
   }
-
+  // 解析变量名
   private _parseIdentifier(): Identifier {
     const token = this._getCurrentToken();
     const identifier: Identifier = {
@@ -579,6 +581,7 @@ export class Parser {
     return currentToken;
   }
 
+  // 判断token是否已经扫描完
   private _isEnd(): boolean {
     return this._currentIndex >= this._tokens.length;
   }
